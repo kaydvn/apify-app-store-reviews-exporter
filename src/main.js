@@ -77,8 +77,15 @@ async function runJob({ app, country }) {
     let count = 0;
     let pages = MAX_PAGES;
     for (let page = 1; page <= pages; page++) {
-        const r = await getJson(feedUrl(country, app.id, page), opts.timeoutMs);
-        const entries = r.status === 200 ? parseFeed(r.json) : null;
+        // Apple's feed intermittently answers with an empty or malformed feed; retry before giving up.
+        let r;
+        let entries = null;
+        for (let attempt = 0; attempt < 4; attempt++) {
+            if (attempt) await sleep(2000 * attempt);
+            r = await getJson(feedUrl(country, app.id, page), opts.timeoutMs);
+            entries = r.status === 200 ? parseFeed(r.json) : null;
+            if (entries?.length || (r.status !== 200 && r.status !== 0)) break;
+        }
         if (!entries) {
             if (page === 1 && r.status !== 200) return { count, error: r.error || `HTTP ${r.status}` };
             break;
