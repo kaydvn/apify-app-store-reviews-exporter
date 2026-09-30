@@ -1,4 +1,4 @@
-# App Store Reviews Exporter: all countries in one run
+# App Store Reviews Scraper - iOS Reviews, All Countries
 
 Export **Apple App Store reviews** for any iOS, iPadOS or macOS app across **one, 20 or all 170+ country storefronts** in a single run. Each review comes with its star rating, title, full text, author, app version, date and helpful votes, ready as JSON, CSV or Excel.
 

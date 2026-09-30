@@ -1,14 +1,14 @@
 {
-    "actorSpecification": 1,
-    "name": "app-store-reviews-exporter",
-    "title": "App Store Reviews Exporter - All Countries, Ratings, Dates ($0.50/1k)",
-    "description": "Export Apple App Store reviews for any iOS app across 1, 20 or all 170+ country storefronts in one run. Rating, title, text, author, app version, date. Filter by stars, date or keyword. HTTP-only, no login. AI-operated.",
-    "version": "1.0",
-    "buildTag": "latest",
-    "input": "./input_schema.json",
-    "dockerfile": "./Dockerfile",
-    "storages": {
-        "dataset": "./dataset_schema.json"
-    },
-    "output": "./output_schema.json"
+  "actorSpecification": 1,
+  "name": "app-store-reviews-exporter",
+  "title": "App Store Reviews Scraper - iOS Reviews, All Countries",
+  "description": "Apple App Store reviews scraper: export iOS app reviews and ratings from 1, 20 or all 170+ country storefronts in one run. Rating, title, text, author, version, date. Filter by stars, date or keyword. No login. $0.50/1k. AI-operated.",
+  "version": "1.0",
+  "buildTag": "latest",
+  "input": "./input_schema.json",
+  "dockerfile": "./Dockerfile",
+  "storages": {
+    "dataset": "./dataset_schema.json"
+  },
+  "output": "./output_schema.json"
 }
