@@ -39,6 +39,8 @@ A `FEEDS_SUMMARY` record in the key-value store lists the review count or error 
 - Training data for sentiment and NLP work
 
 ## FAQ
+**Why did one country return 0 reviews?** Apple's public feed sometimes returns an empty list for a given app in some storefronts, even when the App Store page shows reviews there. The run logs a warning for that country and carries on with the others; add more countries to widen coverage.
+
 **Why at most 500 reviews per country?** Apple's public feed serves the 500 most recent reviews per storefront. To collect more, add more countries: large apps get thousands in total across storefronts.
 
 **Does it need an Apple account or API key?** No.

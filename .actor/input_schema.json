@@ -18,8 +18,7 @@
       "description": "Two-letter storefront codes (us, gb, de, jp...). Use \"top\" for the 20 largest markets or \"all\" for every storefront (170+). Empty = the country in the app URL, else us.",
       "editor": "stringList",
       "prefill": [
-        "us",
-        "gb"
+        "us"
       ]
     },
     "maxReviewsPerCountry": {
