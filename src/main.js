@@ -1,5 +1,5 @@
 import { Actor, log } from 'apify';
-import { feedUrl, lastPage, mapReview, pageIsBeforeSince, parseApp, parseFeed, parseSince, passesFilters, resolveCountries } from './lib.js';
+import { feedUrls, lastPage, mapReview, pageIsBeforeSince, parseApp, parseFeed, parseSince, passesFilters, resolveCountries } from './lib.js';
 
 const EVENT = 'review';
 const UA = 'Mozilla/5.0 (compatible; app-store-reviews-exporter/1.0; Apify actor; +https://apify.com/mmaker-bot)';
@@ -18,7 +18,8 @@ async function getJson(url, timeoutMs) {
                 continue;
             }
             const text = await res.text();
-            try { return { status: res.status, json: JSON.parse(text) }; } catch { return { status: res.status, json: null }; }
+            const snippet = text.slice(0, 160).replace(/\s+/g, ' ');
+            try { return { status: res.status, json: JSON.parse(text), snippet }; } catch { return { status: res.status, json: null, snippet }; }
         } catch (err) {
             if (attempt === 2) return { status: 0, json: null, error: err.name === 'AbortError' ? 'timeout' : err.message };
         } finally {
@@ -80,14 +81,24 @@ async function runJob({ app, country }) {
         // Apple's feed intermittently answers with an empty or malformed feed; retry before giving up.
         let r;
         let entries = null;
-        for (let attempt = 0; attempt < 4; attempt++) {
-            if (attempt) await sleep(2000 * attempt);
-            r = await getJson(feedUrl(country, app.id, page), opts.timeoutMs);
-            entries = r.status === 200 ? parseFeed(r.json) : null;
-            if (entries?.length || (r.status !== 200 && r.status !== 0)) break;
+        let url;
+        // Apple's feed intermittently answers with an empty or malformed feed; retry and try URL variants before giving up.
+        const urls = feedUrls(country, app.id, page);
+        const tried = [];
+        outer: for (const u of urls) {
+            for (let attempt = 0; attempt < 3; attempt++) {
+                if (attempt) await sleep(2000 * attempt);
+                url = u;
+                r = await getJson(u, opts.timeoutMs);
+                entries = r.status === 200 ? parseFeed(r.json) : null;
+                tried.push(`${u} -> HTTP ${r.status}${r.error ? ` ${r.error}` : ''}, ${entries === null ? 'not a feed' : `${entries.length} entries`}${r.json && !entries ? ` keys=${Object.keys(r.json).join(',')}` : ''}${r.snippet && entries === null ? ` body="${r.snippet}"` : ''}`);
+                if (entries?.length) break outer;
+                if (r.status !== 200 && r.status !== 0) break;
+            }
         }
+        if (page === 1 && !entries?.length) log.warning(`${app.id}/${country}: page 1 gave no reviews. Tried:\n  ${tried.join('\n  ')}`);
         if (!entries) {
-            if (page === 1 && r.status !== 200) return { count, error: r.error || `HTTP ${r.status}` };
+            if (page === 1 && r.status !== 200) return { count, error: r.error || `HTTP ${r.status}`, url };
             break;
         }
         if (page === 1) pages = Math.min(lastPage(r.json) || MAX_PAGES, MAX_PAGES);
@@ -120,7 +131,7 @@ async function worker() {
         }
         summary.push({ appId: job.app.id, country: job.country, ...res });
         if (res.error) log.warning(`${job.app.id}/${job.country}: ${res.error}`);
-        else if (res.count) log.info(`${job.app.id}/${job.country}: ${res.count} reviews`);
+        else log.info(`${job.app.id}/${job.country}: ${res.count} reviews`);
     }
 }
 await Promise.all(Array.from({ length: concurrency }, worker));

@@ -46,6 +46,15 @@ export function feedUrl(country, id, page, sort = 'mostrecent') {
     return `https://itunes.apple.com/${country}/rss/customerreviews/page=${page}/id=${id}/sortby=${sort}/json`;
 }
 
+// URL variants for one page: the canonical one first, then fallbacks Apple also serves.
+export function feedUrls(country, id, page) {
+    return [
+        feedUrl(country, id, page),
+        `https://itunes.apple.com/${country}/rss/customerreviews/id=${id}/page=${page}/sortby=mostrecent/json`,
+        `https://itunes.apple.com/${country}/rss/customerreviews/page=${page}/id=${id}/json`,
+    ];
+}
+
 const label = (v) => (v && typeof v === 'object' && 'label' in v ? v.label : null);
 
 // Returns an array of raw review entries, [] for an empty feed, or null if the JSON is not a feed.
