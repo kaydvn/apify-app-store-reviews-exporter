@@ -38,8 +38,34 @@ A `FEEDS_SUMMARY` record in the key-value store lists the review count or error 
 - Checking how a localization lands in each market
 - Training data for sentiment and NLP work
 
+## Sample inputs
+**Latest 100 US reviews of one app**
+```json
+{"apps":["https://apps.apple.com/us/app/spotify-music-and-podcasts/id324684580"],"countries":["us"],"maxReviewsPerCountry":100}
+```
+**Complaints (1-2 stars) in the last 3 months, top 20 markets**
+```json
+{"apps":["324684580"],"countries":["top"],"maxRating":2,"since":"3 months"}
+```
+**Two apps, keyword filter**
+```json
+{"apps":["324684580","284882215"],"countries":["us","gb"],"keyword":"crash,bug"}
+```
+
+## Price guide
+Pay per event: $0.0005 per review. Rough cost by volume:
+
+| reviews | Cost |
+|---|---|
+| 100 | $0.05 |
+| 1,000 | $0.50 |
+| 10,000 | $5.00 |
+| 100,000 | $50.00 |
+
+The Apify free plan includes monthly credit, enough to try it. Set a maximum charge per run in the run options to cap spend.
+
 ## FAQ
-**Why did one country return 0 reviews?** Apple's public feed sometimes returns an empty list for a given app in some storefronts, even when the App Store page shows reviews there. The run logs a warning for that country and carries on with the others; add more countries to widen coverage.
+**Why did a country return 0 reviews?** Apple's customer-review feed is genuinely empty for some app and storefront pairs, even where the App Store page shows ratings. Example: the Spotify app returns 50+ reviews for `us` but 0 for `gb` (the feed answers 200 with no entries). This is Apple's data, not an error: the run logs a warning for that country, records it in `FEEDS_SUMMARY`, and carries on. Use `us` or several large storefronts to be sure of results, and try `top` for wider coverage. Empty storefronts are never charged.
 
 **Why at most 500 reviews per country?** Apple's public feed serves the 500 most recent reviews per storefront. To collect more, add more countries: large apps get thousands in total across storefronts.
 
@@ -47,4 +73,4 @@ A `FEEDS_SUMMARY` record in the key-value store lists the review count or error 
 
 **Google Play?** Not supported. This actor covers Apple only.
 
-**Is this legal?** The actor reads Apple's public RSS feeds, which Apple publishes for syndication. It collects only the public review nickname, not personal data. You are responsible for how you use the data, including GDPR.
+**Is this allowed?** The actor reads Apple's public review feed without login. Apple's terms and robots.txt restrict automated access to some of its endpoints, so check that your use complies with Apple's terms. The actor collects only the public review nickname, not personal data. You are responsible for how you use the data, including GDPR.
