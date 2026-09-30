@@ -1,0 +1,79 @@
+{
+  "title": "App Store Reviews Exporter",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "apps": {
+      "title": "Apps",
+      "type": "array",
+      "description": "App Store URLs (https://apps.apple.com/us/app/name/id284882215) or numeric app IDs.",
+      "editor": "stringList",
+      "prefill": [
+        "https://apps.apple.com/us/app/spotify-music-and-podcasts/id324684580"
+      ]
+    },
+    "countries": {
+      "title": "Countries",
+      "type": "array",
+      "description": "Two-letter storefront codes (us, gb, de, jp...). Use \"top\" for the 20 largest markets or \"all\" for every storefront (170+). Empty = the country in the app URL, else us.",
+      "editor": "stringList",
+      "prefill": [
+        "us",
+        "gb"
+      ]
+    },
+    "maxReviewsPerCountry": {
+      "title": "Max reviews per country",
+      "type": "integer",
+      "description": "Apple serves up to 500 of the most recent reviews per storefront.",
+      "minimum": 1,
+      "maximum": 500,
+      "default": 500
+    },
+    "maxReviewsPerApp": {
+      "title": "Max reviews per app",
+      "type": "integer",
+      "description": "Stop an app after this many reviews across all countries. Empty = no limit.",
+      "minimum": 1
+    },
+    "minRating": {
+      "title": "Min stars",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5,
+      "default": 1,
+      "description": "Only reviews with at least this many stars."
+    },
+    "maxRating": {
+      "title": "Max stars",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5,
+      "default": 5,
+      "description": "Only reviews with at most this many stars (e.g. 2 for complaints)."
+    },
+    "since": {
+      "title": "Since",
+      "type": "string",
+      "editor": "textfield",
+      "description": "Only reviews after this date: 2026-01-01, or relative like \"7 days\", \"4 weeks\", \"3 months\"."
+    },
+    "keyword": {
+      "title": "Keywords",
+      "type": "string",
+      "editor": "textfield",
+      "description": "Comma-separated; keep reviews whose title or text contains any of them (case-insensitive)."
+    },
+    "concurrency": {
+      "title": "Concurrency",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10,
+      "default": 4,
+      "description": "Storefront feeds fetched in parallel."
+    }
+  },
+  "required": [
+    "apps"
+  ]
+}

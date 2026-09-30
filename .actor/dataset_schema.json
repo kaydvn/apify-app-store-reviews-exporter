@@ -1,0 +1,141 @@
+{
+  "actorSpecification": 1,
+  "fields": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+      "appId": {
+        "type": "string",
+        "description": "App Store app ID"
+      },
+      "appName": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "App name"
+      },
+      "country": {
+        "type": "string",
+        "description": "Storefront country code"
+      },
+      "reviewId": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Review ID"
+      },
+      "rating": {
+        "type": [
+          "integer",
+          "null"
+        ],
+        "description": "Stars 1-5"
+      },
+      "title": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Review title"
+      },
+      "text": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Review text"
+      },
+      "author": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Reviewer nickname"
+      },
+      "authorUrl": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Reviewer profile URL"
+      },
+      "appVersion": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "App version reviewed"
+      },
+      "date": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Review date (ISO 8601)"
+      },
+      "voteSum": {
+        "type": [
+          "integer",
+          "null"
+        ],
+        "description": "Helpful votes"
+      },
+      "voteCount": {
+        "type": [
+          "integer",
+          "null"
+        ],
+        "description": "Total votes"
+      }
+    },
+    "additionalProperties": true
+  },
+  "views": {
+    "overview": {
+      "title": "Overview",
+      "transformation": {
+        "fields": [
+          "appName",
+          "country",
+          "rating",
+          "title",
+          "text",
+          "date",
+          "appVersion",
+          "author"
+        ]
+      },
+      "display": {
+        "component": "table",
+        "properties": {
+          "appName": {
+            "label": "appName"
+          },
+          "country": {
+            "label": "country"
+          },
+          "rating": {
+            "label": "rating"
+          },
+          "title": {
+            "label": "title"
+          },
+          "text": {
+            "label": "text"
+          },
+          "date": {
+            "label": "date"
+          },
+          "appVersion": {
+            "label": "appVersion"
+          },
+          "author": {
+            "label": "author"
+          }
+        }
+      }
+    }
+  }
+}

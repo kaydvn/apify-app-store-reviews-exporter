@@ -1,0 +1,15 @@
+{
+  "name": "app-store-reviews-exporter",
+  "version": "1.0.0",
+  "description": "Export Apple App Store reviews for any app across one, many or all country storefronts. HTTP-only.",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "node src/main.js",
+    "test": "node --test test/*.test.js"
+  },
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "apify": "^3.7.2"
+  }
+}
