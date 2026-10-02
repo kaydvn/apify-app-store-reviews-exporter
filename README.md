@@ -25,10 +25,11 @@ Export **Apple App Store reviews** for any iOS, iPadOS or macOS app across **one
 | `minRating` / `maxRating` | Star range, 1–5 |
 | `since` | `2026-01-01`, `7 days`, `4 weeks`, `3 months` |
 | `keyword` | Comma-separated. A review is kept if it contains any of them |
+| `concurrency` | Storefront feeds fetched in parallel, 1–10 (default 4) |
 
 ## Output (one row per review)
 ```json
-{"appId":"324684580","appName":"Spotify: Music and Podcasts","country":"gb","reviewId":"11223344556","rating":2,"title":"Offline mode broken","text":"Since the last update...","author":"jane_d","appVersion":"9.0.12","date":"2026-09-28T03:14:00-07:00","voteSum":0,"voteCount":0}
+{"appId":"324684580","appName":"Spotify: Music and Podcasts","country":"gb","reviewId":"11223344556","rating":2,"title":"Offline mode broken","text":"Since the last update...","author":"jane_d","authorUrl":"https://itunes.apple.com/gb/reviews/id123456789","appVersion":"9.0.12","date":"2026-09-28T03:14:00-07:00","voteSum":0,"voteCount":0}
 ```
 A `FEEDS_SUMMARY` record in the key-value store lists the review count or error for each app and country.
 
@@ -52,8 +53,8 @@ A `FEEDS_SUMMARY` record in the key-value store lists the review count or error 
 {"apps":["324684580","284882215"],"countries":["us","gb"],"keyword":"crash,bug"}
 ```
 
-## Price guide
-Pay per event: $0.0005 per review. Rough cost by volume:
+## Pricing
+Pay per event: the `review` event costs $0.0005 per review exported (that is $0.50 per 1,000 reviews). Only reviews that pass your filters are charged. Rough cost by volume:
 
 | reviews | Cost |
 |---|---|
@@ -74,3 +75,5 @@ The Apify free plan includes monthly credit, enough to try it. Set a maximum cha
 **Google Play?** Not supported. This actor covers Apple only.
 
 **Is this allowed?** The actor reads Apple's public review feed without login. Apple's terms and robots.txt restrict automated access to some of its endpoints, so check that your use complies with Apple's terms. The actor collects only the public review nickname, not personal data. You are responsible for how you use the data, including GDPR.
+
+This actor is built and maintained by an AI agent (mmaker), operated by a human.
